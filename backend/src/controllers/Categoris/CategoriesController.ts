@@ -1,9 +1,9 @@
-import {CreateService} from "../../services/common/CreateServices.js";
-import DataModel from "../../models/Categories/CategoriesModel.js"
-import {UpdateService} from "../../services/common/UpdateService.js";
-import {ListService} from "../../services/common/ListService.js";
-import DropDownService from "../../services/common/DropDownService.js";
-import DeleteService from "../../services/common/DeleteService.js";
+import {CreateService} from "../../services/common/CreateServices.ts";
+import DataModel from "../../models/Categories/CategoriesModel.ts"
+import {UpdateService} from "../../services/common/UpdateService.ts";
+import {ListService} from "../../services/common/ListService.ts";
+import DropDownService from "../../services/common/DropDownService.ts";
+import DeleteService from "../../services/common/DeleteService.ts";
 
 export const CategoriesController={
     CreateCategories:async (req, res) => {

@@ -1,12 +1,12 @@
 
 import DataModel from '../../models/brand/BrandModel.js'
-import {CreateService} from "../../services/common/CreateServices.js";
-import {UpdateService} from "../../services/common/UpdateService.js";
-import {ListService} from "../../services/common/ListService.js";
-import DropDownService from "../../services/common/DropDownService.js";
-//import CheckAssociateService from "../../services/common/CheckAssociateService.js";
+import {CreateService} from "../../services/common/CreateServices.ts";
+import {UpdateService} from "../../services/common/UpdateService.ts";
+import {ListService} from "../../services/common/ListService.ts";
+import DropDownService from "../../services/common/DropDownService.ts";
+//import CheckAssociateService from "../../services/common/CheckAssociateService.ts";
 //import mongoose from "mongoose";
-//import DeleteService from "../../services/common/DeleteService.js";
+//import DeleteService from "../../services/common/DeleteService.ts";
 
 
 export const BranController= {

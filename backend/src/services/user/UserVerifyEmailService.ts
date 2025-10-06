@@ -1,5 +1,5 @@
 import OTPSModel from "../../models/Users/OTPSModel.js";
-import SendEmailUtility from "../../utility/SendEmailUtilitis.js";
+import SendEmailUtility from "../../utility/SendEmailUtilitis.ts";
 
 export const UserVerifyEmailService= async (Request, DataModel) => {
     try {
