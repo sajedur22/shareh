@@ -1,19 +1,22 @@
-import express from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import hpp from 'hpp';
-import cors from 'cors';
+import cors, {CorsOptions} from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
 
 
+
 dotenv.config();
-import router from './src/routes/api.js'; // .js extension দিতে হবে
+import router from './src/routes/api/api'; // .js extension দিতে হবে
 import path from 'path';
 
-const app = express();
+const app: Application = express();
+
+
 
 // Security Middleware
 
@@ -22,8 +25,8 @@ const CLIENT_URLS = [
     process.env.PROD_CLIENT_URL,
 ].filter(Boolean);
 
-const corsOptions = {
-    origin: function (origin, callback) {
+const corsOptions: CorsOptions = {
+    origin: (origin, callback) => {
         if (!origin || CLIENT_URLS.includes(origin)) {
             callback(null, true);
         } else {
@@ -39,8 +42,8 @@ app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(hpp());
 
 // Custom Mongo Sanitize Middleware
-function sanitizeMongo(req, res, next) {
-    const sanitize = (obj) => {
+function sanitizeMongo(req:Request, res:Response, next:NextFunction) {
+    const sanitize = (obj:Record<string,any>) => {
         for (let key in obj) {
             if (/^\$/.test(key) || /\./.test(key)) {
                 delete obj[key];
@@ -73,7 +76,7 @@ app.use(limiter);
 app.use(cookieParser());
 
 // MongoDB Connection
-const uri = process.env.MONGO_URI;
+const uri = process.env.MONGO_URI as string;
 const options = {
     user: process.env.MONGO_USER,
     pass: process.env.MONGO_PASS,
@@ -85,6 +88,6 @@ mongoose.connect(uri, options)
     .catch(err => console.error(err));
 
 // API Routing
-app.use("/api/v1", router);
+app.use("/apij/v1", router);
 
 export default app;

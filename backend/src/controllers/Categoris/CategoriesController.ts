@@ -1,16 +1,16 @@
-import {CreateService} from "../../services/common/CreateServices.ts";
-import DataModel from "../../models/Categories/CategoriesModel.ts"
-import {UpdateService} from "../../services/common/UpdateService.ts";
-import {ListService} from "../../services/common/ListService.ts";
-import DropDownService from "../../services/common/DropDownService.ts";
-import DeleteService from "../../services/common/DeleteService.ts";
+import {CreateService} from "../../services/common/CreateServices";
+import DataModel from "../../models/Categories/CategoriesModel"
+import {UpdateService} from "../../services/common/UpdateService";
+import {ListService} from "../../services/common/ListService";
+import DropDownService from "../../services/common/DropDownService";
+import DeleteService from "../../services/common/DeleteService";
 
 export const CategoriesController={
-    CreateCategories:async (req, res) => {
+    CreateCategories:async (req: Request, res: Response): Promise<void> => {
         let Result= await CreateService(req,DataModel)
         res.status(200).json(Result)
     },
-    UpdateCategories:async (req, res) => {
+    UpdateCategories:async (req: Request, res: Response): Promise<void> => {
         let Result=await UpdateService(req,DataModel)
         res.status(200).json(Result)
     },

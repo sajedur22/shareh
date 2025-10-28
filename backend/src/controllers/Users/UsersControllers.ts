@@ -1,14 +1,14 @@
 
-import DataModel from "../../models/Users/UserModel.js";
-import {UserCreateService} from "../../services/user/UserCreateService.ts";
-import {UserLoginService} from "../../services/user/UserLoginService.ts"
-import {UserUpdateService} from "../../services/user/UserUpdateService.ts"
-import {UserDetailsService} from "../../services/user/UserDetailsService.ts";
-import CreateToken from "../../utility/CreateToken.ts";
-import {UserVerifyEmailService} from "../../services/user/UserVerifyEmailService.ts";
-import {UserVerifyOtpService} from "../../services/user/UserVerifyOtpService.ts";
-import OTPSModel from "../../models/Users/OTPSModel.js";
-import {UserResetPassService} from "../../services/user/UserResetPassService.ts";
+import DataModel from "../../models/Users/UserModel";
+import {UserCreateService} from "../../services/user/UserCreateService";
+import {UserLoginService} from "../../services/user/UserLoginService"
+import {UserUpdateService} from "../../services/user/UserUpdateService"
+import {UserDetailsService} from "../../services/user/UserDetailsService";
+import CreateToken from "../../utility/CreateToken";
+import {UserVerifyEmailService} from "../../services/user/UserVerifyEmailService";
+import {UserVerifyOtpService} from "../../services/user/UserVerifyOtpService";
+import OTPSModel from "../../models/Users/OTPSModel";
+import {UserResetPassService} from "../../services/user/UserResetPassService";
 
 
 

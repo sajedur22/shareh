@@ -1,4 +1,4 @@
-// lib/api/userApi.ts
+// lib/apij/userApi.ts
 export async function registerUser(userData: Record<string, any>) {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Registration`, {
