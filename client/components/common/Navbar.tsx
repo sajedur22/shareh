@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState, useEffect, useMemo, JSX} from "react";
+import React, { useState, useEffect, useMemo, JSX } from "react";
 import { HousePlug, Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -34,7 +34,7 @@ export default function Navbar(): JSX.Element {
 
     const SCROLL_OFFSET = 160; // Navbar height
 
-    // ✅ Memoized Links Array (prevents useEffect dependency warning)
+    // ✅ Memoized Links
     const links = useMemo<NavLink[]>(
         () => [
             {
@@ -81,7 +81,7 @@ export default function Navbar(): JSX.Element {
         []
     );
 
-    // ✅ Smooth Scroll Function
+    // ✅ Smooth Scroll
     const handleScrollClick = (
         e: React.MouseEvent<HTMLAnchorElement>,
         targetId: string
@@ -120,7 +120,6 @@ export default function Navbar(): JSX.Element {
                     }
                 }
 
-                // Subsections check
                 link.subLinks?.forEach((sub) => {
                     const subSection = document.getElementById(sub.id);
                     if (subSection) {
@@ -157,14 +156,12 @@ export default function Navbar(): JSX.Element {
         <header className="fixed top-0 left-0 w-full z-50 bg-background shadow-md backdrop-blur-sm transition-colors duration-300 dark:bg-background/80">
             {/* 💻 Desktop Navbar */}
             <div className="hidden md:flex justify-between items-center h-14 max-w-7xl mx-auto px-6">
-                {/* Logo */}
                 <div className="text-primary-foreground cursor-pointer">
                     <Link href={"/"}>
                         <HousePlug className="h-6 w-6" />
                     </Link>
                 </div>
 
-                {/* Menu */}
                 <nav className="flex justify-between text-lg font-medium gap-6">
                     {links.map((link) => (
                         <MenuItem
@@ -178,7 +175,9 @@ export default function Navbar(): JSX.Element {
                                     <HoveredLink
                                         key={sub.id}
                                         href={`#${sub.id}`}
-                                        onClick={(e:any) => handleScrollClick(e, sub.id)}
+                                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
+                                            handleScrollClick(e, sub.id)
+                                        }
                                     >
                                         {sub.label}
                                     </HoveredLink>
@@ -188,7 +187,6 @@ export default function Navbar(): JSX.Element {
                     ))}
                 </nav>
 
-                {/* Auth Section */}
                 <div>
                     {!isLoggedIn ? (
                         <button
@@ -267,9 +265,7 @@ export default function Navbar(): JSX.Element {
                                             alt="User"
                                             className="h-8 w-8 rounded-full border border-yellow-400"
                                         />
-                                        <span className="text-yellow-300 text-sm font-medium">
-                      Shakil
-                    </span>
+                                        <span className="text-yellow-300 text-sm font-medium">Shakil</span>
                                         <button
                                             onClick={handleLogout}
                                             className="text-xs text-muted-foreground hover:text-red-400"
