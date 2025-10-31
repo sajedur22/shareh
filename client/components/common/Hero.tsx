@@ -2,6 +2,7 @@
 
 
 import { motion } from "motion/react";
+import {WhyChoose} from "@/components/common/WhyChoose";
 
 
 export function Hero() {
@@ -86,6 +87,9 @@ export function Hero() {
                 </motion.div>
 
 
+            </div>
+            <div>
+                <WhyChoose/>
             </div>
         </div>
     );
