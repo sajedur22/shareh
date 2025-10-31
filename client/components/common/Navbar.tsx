@@ -12,6 +12,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { HoveredLink, MenuItem } from "../ui/navbar-menu";
+import Image from "next/image";
 
 // 🔷 Type Definitions
 interface SubLink {
@@ -260,7 +261,7 @@ export default function Navbar(): JSX.Element {
                                     </button>
                                 ) : (
                                     <div className="flex items-center gap-2">
-                                        <img
+                                        <Image
                                             src="https://avatars.githubusercontent.com/u/9919?s=280&v=4"
                                             alt="User"
                                             className="h-8 w-8 rounded-full border border-yellow-400"

@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { BackgroundGradient } from "../ui/background-gradient";
 import Link from "next/link";
+import Image from "next/image";
 
 const data = [
     {
@@ -72,7 +73,7 @@ export const Courses: React.FC = () => {
                         key={course.id}
                         className="rounded-[22px] max-w-sm p-3 sm:p-8 bg-white dark:bg-zinc-900 flex flex-col"
                     >
-                        <img
+                        <Image
                             src={course.image}
                             alt={course.title}
                             height={400}
