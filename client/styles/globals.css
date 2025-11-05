@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
-
-html,body {
+html, body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  padding-top:4px;
+  padding-top: 0; /* ✅ no extra space at top */
   min-height: 100%;
-  max-width: 100% ;
-  overflow-x: hidden; /* prevent horizontal scroll */
-  scroll-behavior: smooth; /* optional: smooth scroll */
+  max-width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
   margin: 0;
 }
+
 
 
 @theme inline {
@@ -133,5 +133,19 @@ html,body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+}
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease-out;
 }
 
