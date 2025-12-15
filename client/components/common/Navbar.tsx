@@ -1,20 +1,17 @@
 "use client";
-
-import React, { useState, useEffect, useMemo, JSX } from "react";
+import React, { useState, useMemo } from "react";
 import { HousePlug, Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { MenuItem, HoveredLink } from "../ui/navbar-menu";
 import {
     DropdownMenu,
+    DropdownMenuTrigger,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { HoveredLink, MenuItem } from "../ui/navbar-menu";
+} from "../ui/dropdown-menu";
 import Image from "next/image";
 
-// 🔷 Type Definitions
 interface SubLink {
     id: string;
     label: string;
@@ -23,167 +20,62 @@ interface SubLink {
 interface NavLink {
     id: string;
     label: string;
+    href: string;
     subLinks?: SubLink[];
 }
 
-// 🔶 Navbar Component
-export default function Navbar(): JSX.Element {
+export default function Navbar() {
     const pathname = usePathname();
-    const [activeSection, setActiveSection] = useState<string>("home");
-    const [active, setActive] = useState<string | null>(null);
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const SCROLL_OFFSET = 160; // Navbar height
+    // 👉 Single active dropdown control
+    const [activeItem, setActiveItem] = useState<string | null>(null);
 
-    // ✅ Memoized Links
-    const links = useMemo<NavLink[]>(
-        () => [
-            {
-                id: "courses",
-                label: "Courses",
-                subLinks: [{ id: "web-development", label: "Web Development" }],
-            },
-            {
-                id: "blog",
-                label: "Blog",
-                subLinks: [
-                    { id: "latest-posts", label: "Latest Posts" },
-                    { id: "tutorials", label: "Tutorials" },
-                    { id: "case-studies", label: "Case Studies" },
-                    { id: "news", label: "News" },
-                ],
-            },
-            {
-                id: "contacts",
-                label: "Contacts",
-                subLinks: [
-                    { id: "support", label: "Support" },
-                    { id: "careers", label: "Careers" },
-                    { id: "feedback", label: "Feedback" },
-                ],
-            },
-            {
-                id: "events",
-                label: "Events",
-                subLinks: [
-                    { id: "upcoming", label: "Upcoming" },
-                    { id: "past", label: "Past" },
-                ],
-            },
-            {
-                id: "faq",
-                label: "FAQ",
-                subLinks: [
-                    { id: "general", label: "General" },
-                    { id: "billing", label: "Billing" },
-                ],
-            },
-        ],
-        []
-    );
-
-    // ✅ Smooth Scroll
-    const handleScrollClick = (
-        e: React.MouseEvent<HTMLAnchorElement>,
-        targetId: string
-    ): void => {
-        if (pathname !== "/") return;
-        e.preventDefault();
-
-        const target = document.getElementById(targetId);
-        if (!target) return;
-
-        window.scrollTo({
-            top: target.offsetTop - SCROLL_OFFSET,
-            behavior: "smooth",
-        });
-
-        setActive(targetId);
-    };
-
-    // ✅ Scroll Event Listener
-    useEffect(() => {
-        if (pathname !== "/") return;
-
-        const handleScroll = (): void => {
-            const scrollPosition = window.scrollY + SCROLL_OFFSET;
-            let current = "home";
-
-            for (const link of links) {
-                const section = document.getElementById(link.id);
-                if (section) {
-                    if (
-                        section.offsetTop <= scrollPosition &&
-                        section.offsetTop + section.offsetHeight > scrollPosition
-                    ) {
-                        current = link.id;
-                        break;
-                    }
-                }
-
-                link.subLinks?.forEach((sub) => {
-                    const subSection = document.getElementById(sub.id);
-                    if (subSection) {
-                        if (
-                            subSection.offsetTop <= scrollPosition &&
-                            subSection.offsetTop + subSection.offsetHeight > scrollPosition
-                        ) {
-                            current = link.id;
-                        }
-                    }
-                });
-            }
-
-            setActiveSection(current);
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [pathname, links]);
-
-    // ✅ Utility for active link styles
-    const getLinkClasses = (linkId: string): string =>
-        `cursor-pointer transition-colors ${
-            activeSection === linkId || active === linkId
-                ? "text-yellow-300"
-                : "text-muted-foreground"
-        } hover:text-yellow-300`;
-
-    // ✅ Auth handlers
-    const handleLogin = (): void => setIsLoggedIn(true);
-    const handleLogout = (): void => setIsLoggedIn(false);
+    const links = useMemo<NavLink[]>(() => [
+        {
+            id: "courses",
+            label: "Courses",
+            href: "/my-courses",
+            subLinks: [{ id: "myCourse", label: "My Course" }],
+        },
+        {
+            id: "blog",
+            label: "Blog",
+            href: "/blog",
+            subLinks: [
+                { id: "latest-posts", label: "Latest Posts" },
+                { id: "tutorials", label: "Tutorials" },
+            ],
+        },
+        { id: "contacts", label: "Contacts", href: "/contacts" },
+        { id: "faq", label: "FAQ", href: "/faq" },
+    ], []);
 
     return (
-        <header className="fixed top-0 left-0 w-full z-50 bg-background shadow-md backdrop-blur-sm transition-colors duration-300 dark:bg-background/80">
-            {/* 💻 Desktop Navbar */}
+        <header className="fixed top-0 left-0 w-full z-50 bg-background shadow-md backdrop-blur-sm">
+
+            {/* Desktop Navbar */}
             <div className="hidden md:flex justify-between items-center h-14 max-w-7xl mx-auto px-6">
-                <div className="text-primary-foreground cursor-pointer">
-                    <Link href={"/"}>
-                        <HousePlug className="h-6 w-6" />
+                <div>
+                    <Link href="/">
+                        <HousePlug className="text-white h-6 w-6" />
                     </Link>
                 </div>
 
-                <nav className="flex justify-between text-lg font-medium gap-6">
+                <nav className="flex gap-6 text-lg font-medium">
                     {links.map((link) => (
                         <MenuItem
                             key={link.id}
-                            setActive={setActive}
-                            active={active}
                             item={link.label}
+                            href={link.href}
+                            activeItem={activeItem}
+                            setActiveItem={setActiveItem}
                         >
-                            <div className="flex flex-col space-y-2 p-2">
-                                {link.subLinks?.map((sub) => (
-                                    <HoveredLink
-                                        key={sub.id}
-                                        href={`#${sub.id}`}
-                                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                                            handleScrollClick(e, sub.id)
-                                        }
-                                    >
-                                        {sub.label}
-                                    </HoveredLink>
-                                ))}
-                            </div>
+                            {link.subLinks?.map((sub) => (
+                                <HoveredLink key={sub.id} href={`#${sub.id}`}>
+                                    {sub.label}
+                                </HoveredLink>
+                            ))}
                         </MenuItem>
                     ))}
                 </nav>
@@ -191,23 +83,22 @@ export default function Navbar(): JSX.Element {
                 <div>
                     {!isLoggedIn ? (
                         <button
-                            onClick={handleLogin}
+                            onClick={() => setIsLoggedIn(true)}
                             className="px-4 py-2 text-sm font-medium bg-yellow-400 text-black rounded-xl hover:bg-yellow-300 transition"
                         >
                             Login
                         </button>
                     ) : (
                         <div className="flex items-center gap-2">
-                            <img
+                            <Image
                                 src="https://avatars.githubusercontent.com/u/9919?s=280&v=4"
                                 alt="User"
-                                className="h-8 w-8 rounded-full border border-yellow-400"
+                                width={32}
+                                height={32}
+                                className="rounded-full border border-yellow-400"
                             />
                             <span className="text-yellow-300 text-sm font-medium">Shakil</span>
-                            <button
-                                onClick={handleLogout}
-                                className="text-xs text-muted-foreground hover:text-red-400"
-                            >
+                            <button className="text-xs hover:text-red-400" onClick={() => setIsLoggedIn(false)}>
                                 Logout
                             </button>
                         </div>
@@ -215,71 +106,51 @@ export default function Navbar(): JSX.Element {
                 </div>
             </div>
 
-            {/* 📱 Mobile Navbar */}
-            <div className="flex md:hidden justify-between items-center h-12 max-w-7xl mx-auto px-6">
-                <div className="text-primary-foreground cursor-pointer">
-                    <Link href={"/"}>
-                        <HousePlug className="h-5 w-5" />
-                    </Link>
-                </div>
+            {/* ---------------- MOBILE NAVBAR ---------------- */}
+            <div className="md:hidden flex justify-between items-center h-14 px-4">
 
+                {/* Logo */}
+                <Link href="/">
+                    <HousePlug className="text-white h-6 w-6" />
+                </Link>
+
+                {/* Mobile Menu */}
                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <button
-                            aria-label="Open navigation menu"
-                            className="p-2 rounded-md"
-                            suppressHydrationWarning
-                        >
-                            <Menu className="h-6 w-6 text-white" />
-                        </button>
+                    <DropdownMenuTrigger className="p-2 border rounded-md">
+                        <Menu className="text-white h-5 w-5" />
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent align="end" className="w-48">
-                        <DropdownMenuSeparator />
+                    <DropdownMenuContent className="w-48 mt-2 ">
+
                         {links.map((link) => (
-                            <DropdownMenuItem key={link.id} asChild>
-                                <div>
-                                    <Link
-                                        href={`#${link.id}`}
-                                        onClick={(e) => handleScrollClick(e, link.id)}
-                                        className={getLinkClasses(link.id)}
-                                    >
-                                        {link.label}
-                                    </Link>
-                                </div>
+                            <DropdownMenuItem key={link.id}>
+                                <Link href={link.href}>{link.label}</Link>
                             </DropdownMenuItem>
                         ))}
 
-                        <DropdownMenuItem>
-                            <div>
-                                {!isLoggedIn ? (
-                                    <button
-                                        onClick={handleLogin}
-                                        className="px-4 py-2 text-sm font-medium bg-yellow-400 text-black rounded-xl hover:bg-yellow-300 transition"
-                                    >
-                                        Login
-                                    </button>
-                                ) : (
-                                    <div className="flex items-center gap-2">
-                                        <Image
-                                            src="https://avatars.githubusercontent.com/u/9919?s=280&v=4"
-                                            alt="User"
-                                            className="h-8 w-8 rounded-full border border-yellow-400"
-                                        />
-                                        <span className="text-yellow-300 text-sm font-medium">Shakil</span>
-                                        <button
-                                            onClick={handleLogout}
-                                            className="text-xs text-muted-foreground hover:text-red-400"
-                                        >
-                                            Logout
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
+                        <DropdownMenuItem className="mt-2 border-t pt-2">
+                            {!isLoggedIn ? (
+                                <button
+                                    onClick={() => setIsLoggedIn(true)}
+                                    className="w-full text-left"
+                                >
+                                    Login
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => setIsLoggedIn(false)}
+                                    className="w-full text-left text-red-500"
+                                >
+                                    Logout
+                                </button>
+                            )}
                         </DropdownMenuItem>
+
                     </DropdownMenuContent>
                 </DropdownMenu>
+
             </div>
         </header>
     );
+
 }

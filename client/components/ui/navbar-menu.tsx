@@ -1,127 +1,78 @@
 "use client";
-import React from "react";
-import { motion, Transition } from "motion/react";
 
-// 🔹 Transition for motion
-const transition: Transition = {
-    type: "spring",
-    mass: 0.5,
-    damping: 11.5,
-    stiffness: 100,
-    restDelta: 0.001,
-    restSpeed: 0.001,
-};
+import React, { ReactNode, useRef } from "react";
+import Link from "next/link";
+import { motion } from "motion/react";
 
-// 🔹 MenuItem Props
 interface MenuItemProps {
-    setActive: React.Dispatch<React.SetStateAction<string | null>>;
-    active: string | null;
     item: string;
-    children?: React.ReactNode;
+    href: string;
+    children?: ReactNode;
+    activeItem: string | null;
+    setActiveItem: (v: string | null) => void;
 }
 
 export const MenuItem: React.FC<MenuItemProps> = ({
-                                                      setActive,
-                                                      active,
                                                       item,
+                                                      href,
                                                       children,
+                                                      activeItem,
+                                                      setActiveItem,
                                                   }) => {
-    return (
-        <div onMouseEnter={() => setActive(item)} className="relative">
-            <motion.p
-                transition={{ duration: 0.3 }}
-                className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
-            >
-                {item}
-            </motion.p>
+    const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
 
-            {active !== null && (
+    const handleEnter = () => {
+        if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
+        setActiveItem(item);
+    };
+
+    const handleLeave = () => {
+        hoverTimeout.current = setTimeout(() => setActiveItem(null), 800);
+    };
+
+    const hovered = activeItem === item;
+
+    return (
+        <div
+            className="relative"
+            onMouseEnter={handleEnter}
+            onMouseLeave={handleLeave}
+        >
+            <button
+                className={`px-3 py-1 rounded-md font-medium transition-colors ${
+                    hovered ? "text-yellow-300" : "text-black dark:text-white"
+                }`}
+            >
+                <Link href={href}>{item}</Link>
+            </button>
+
+            {hovered && children && (
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.85, y: 10 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={transition} // ✅ type-safe
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ type: "spring", stiffness: 120, damping: 12 }}
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50"
                 >
-                    {active === item && (
-                        <div className="absolute top-[calc(100%_+_1.2rem)] left-1/2 transform -translate-x-1/2 pt-4">
-                            <motion.div
-                                transition={transition}
-                                layoutId="active"
-                                className="bg-white dark:bg-black backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.2] dark:border-white/[0.2] shadow-xl"
-                            >
-                                <motion.div layout className="w-max h-full p-4">
-                                    {children}
-                                </motion.div>
-                            </motion.div>
-                        </div>
-                    )}
+                    <div className="bg-white dark:bg-black rounded-xl shadow-lg border border-black/20 p-2 flex flex-col gap-1">
+                        {children}
+                    </div>
                 </motion.div>
             )}
         </div>
     );
 };
 
-// 🔹 Menu Props
-interface MenuProps {
-    setActive: React.Dispatch<React.SetStateAction<string | null>>;
-    children: React.ReactNode;
-}
-
-export const Menu: React.FC<MenuProps> = ({ setActive, children }) => {
-    return (
-        <nav
-            onMouseLeave={() => setActive(null)}
-            className="relative rounded-full border border-transparent dark:bg-black dark:border-white/[0.2] bg-white shadow-input flex justify-center space-x-4 px-8 py-6"
-        >
-            {children}
-        </nav>
-    );
-};
-
-// 🔹 ProductItem Props
-interface ProductItemProps {
-    title: string;
-    description: string;
+export const HoveredLink = ({
+                                href,
+                                children,
+                            }: {
     href: string;
-    src: string;
-}
-
-export const ProductItem: React.FC<ProductItemProps> = ({
-                                                            title,
-                                                            description,
-                                                            href,
-                                                            src,
-                                                        }) => {
-    return (
-        <a href={href} className="flex space-x-2">
-            <img
-                src={src}
-                width={140}
-                height={70}
-                alt={title}
-                className="shrink-0 rounded-md shadow-2xl"
-            />
-            <div>
-                <h4 className="text-xl font-bold mb-1 text-black dark:text-white">
-                    {title}
-                </h4>
-                <p className="text-neutral-700 text-sm max-w-[10rem] dark:text-neutral-300">
-                    {description}
-                </p>
-            </div>
-        </a>
-    );
-};
-
-// 🔹 HoveredLink Props
-interface HoveredLinkProps
-    extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-    children: React.ReactNode;
-}
-
-export const HoveredLink: React.FC<HoveredLinkProps> = ({ children, ...rest }) => {
-    return (
-        <a {...rest} className="text-neutral-700 dark:text-neutral-200 hover:text-black">
-            {children}
-        </a>
-    );
-};
+    children: ReactNode;
+}) => (
+    <Link
+        href={href}
+        className="w-full text-left text-white px-3 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-900 transition"
+    >
+        {children}
+    </Link>
+);

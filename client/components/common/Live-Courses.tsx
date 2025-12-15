@@ -19,6 +19,7 @@ const live = {
                     title: "Intro to Docker",
                     date: "2025-10-19",
                     video: "/videos/HeroVdo.mp4",
+                    pdf:"",
                     duration: "00:32:45",
                     slug: "class-46-intro-to-docker",
                     published: true,

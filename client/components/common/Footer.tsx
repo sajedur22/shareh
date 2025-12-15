@@ -59,7 +59,7 @@ export const Footer: FC = () => {
             <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
                 {/* Logo & Description */}
                 <div>
-                    <h2 className="text-2xl font-bold text-white mb-3">BongoDev</h2>
+                    <h2 className="text-2xl font-bold text-white mb-3">SharX</h2>
                     <p className="text-sm leading-relaxed">
                         Empowering technology learners worldwide with professional online
                         live trainings. Transform your IT career with expert-led courses.
@@ -95,7 +95,7 @@ export const Footer: FC = () => {
                                 href="mailto:support@bongodev.com"
                                 className="hover:text-white transition"
                             >
-                                support@bongodev.com
+                                support@G.com
                             </a>
                         </li>
                         <li>01757258398 | 01978367094 | 01576641348</li>
@@ -106,7 +106,7 @@ export const Footer: FC = () => {
             </div>
 
             <div className="border-t border-zinc-700 mt-10 pt-6 text-center text-sm text-zinc-500">
-                © {new Date().getFullYear()} BongoDev. All rights reserved.
+                © {new Date().getFullYear()} All rights reserved.
             </div>
         </footer>
     );

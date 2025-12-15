@@ -1,55 +1,44 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BackgroundGradient } from "../ui/background-gradient";
 import Link from "next/link";
 import Image from "next/image";
-
-const data = [
-    {
-        id: 1,
-        title: "Bootcamp: Robotics & Automation Engineering",
-        description:
-            "Learn how to design, simulate, and program intelligent robotic systems using sensors, actuators, and embedded controllers. Explore AI-powered automation workflows.",
-        duration: "5 months",
-        level: "Intermediate to advanced",
-        next_batch_starting: "2026-01-10",
-        currency: "BDT",
-        original_price: 31995,
-        discounted_price: 19995,
-        image: "/images/web-development.jpg",
-    },
-    {
-        id: 2,
-        title: "Bootcamp: Machine Learning & AI",
-        description:
-            "Build predictive models, explore neural networks, and master deep learning tools like TensorFlow and PyTorch. From data preprocessing to real-world deployment.",
-        duration: "6 months",
-        level: "Beginner to advanced",
-        next_batch_starting: "2026-01-20",
-        currency: "BDT",
-        original_price: 34995,
-        discounted_price: 21995,
-        image: "/images/web-development.jpg",
-    },
-    {
-        id: 3,
-        title: "Bootcamp: Full Stack Web Development",
-        description:
-            "Become a professional full stack developer by mastering React, Next.js, Node.js, and MongoDB. Build responsive, secure, and scalable web apps.",
-        duration: "4.5 months",
-        level: "Beginner to advanced",
-        next_batch_starting: "2026-02-01",
-        currency: "BDT",
-        original_price: 29995,
-        discounted_price: 17995,
-        image: "/images/web-development.jpg",    },
-];
+import { getCourseList } from "@/lib/api/CoursesApi";
+import { Course, ApiResponse } from "@/types/course";
 
 export const Courses: React.FC = () => {
+    const [courses, setCourses] = useState<Course[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadCourses() {
+            try {
+                const courses = await getCourseList(1, 10); // Course[] type
+                setCourses(courses); // direct setCourse, no .data
+            } catch (err: unknown) {
+                if (err instanceof Error) console.error(err.message);
+                else console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadCourses();
+    }, []);
+
+
+    if (loading) {
+        return (
+            <p className="text-center py-20 text-neutral-600 dark:text-neutral-400">
+                Loading courses...
+            </p>
+        );
+    }
+
     return (
-        <div className="py-10">
+        <div className="relative w-full py-10">
             {/* Section Heading */}
             <div className="text-center max-w-3xl mx-auto">
                 <motion.h2
@@ -62,23 +51,31 @@ export const Courses: React.FC = () => {
                 </motion.h2>
 
                 <p className="text-neutral-600 dark:text-neutral-400 text-base mt-2">
-                    Explore why thousands of learners trust us to build their professional future.
+                    Explore why thousands of learners trust us to build their professional
+                    future.
                 </p>
             </div>
 
             {/* Course Cards */}
-            <div className="w-full relative mx-auto mt-16 px-3 grid grid-cols-1 md:grid-cols-3 gap-2 place-items-center">
-                {data.map((course) => (
+            <div
+                className="
+        relative mx-auto mt-16 px-4
+        max-w-7xl
+        grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
+        gap-4 sm:gap-6 lg:gap-8
+      "
+            >
+                {courses?.map((course) => (
                     <BackgroundGradient
-                        key={course.id}
-                        className="rounded-[22px] max-w-sm p-3 sm:p-8 bg-white dark:bg-zinc-900 flex flex-col"
+                        key={course._id}
+                        className="rounded-[22px] w-full max-w-sm p-4 sm:p-6 bg-white dark:bg-zinc-900 flex flex-col"
                     >
                         <Image
                             src={course.image}
                             alt={course.title}
-                            height={400}
+                            height={300}
                             width={400}
-                            className="object-contain w-full h-auto rounded-xl"
+                            className="object-cover w-full h-48 rounded-xl"
                             loading="lazy"
                         />
 
@@ -86,7 +83,7 @@ export const Courses: React.FC = () => {
                             {course.title}
                         </p>
 
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                        <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed line-clamp-3">
                             {course.description}
                         </p>
 
@@ -94,11 +91,12 @@ export const Courses: React.FC = () => {
               <span className="text-sm font-semibold text-black dark:text-white">
                 {course.currency} {course.discounted_price.toLocaleString()}
               </span>
-                       <Link href={"/my-courses"}>
-                            <button className="rounded-full pl-4 pr-4 py-2 text-white bg-black dark:bg-zinc-800 hover:scale-105 transition-transform duration-200 text-sm font-semibold">
-                                Course Details
-                            </button>
-                       </Link>
+
+                            <Link href={`/courses/${course._id}`}>
+                                <button className="rounded-full px-4 py-2 text-white bg-black dark:bg-zinc-800 hover:scale-105 transition-transform duration-200 text-sm font-semibold">
+                                    Course Details
+                                </button>
+                            </Link>
                         </div>
                     </BackgroundGradient>
                 ))}

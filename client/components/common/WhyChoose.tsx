@@ -59,7 +59,7 @@ export const WhyChoose: React.FC = () => {
                     and Brainstation 23
                 </motion.p>
             </div>
-            <div className="relative w-full ">
+            <div className="relative w-full  ">
                 <div
                     className="absolute inset-0 h-full w-full scale-[0.80] transform rounded-full bg-gradient-to-r from-blue-500 to-teal-500 blur-3xl"/>
 
